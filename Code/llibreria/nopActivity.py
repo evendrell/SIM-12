@@ -16,10 +16,12 @@ class nopActivity(slamiii):
         pass      
 
     def iniciSimulacio(self):
+        print('Soc nop i he rebut un iniciSimulacio')
         #Jo no he de fer res
         pass
     
     def fiSimulacio(self):
+        print('Soc nop i he rebut un fiSimulacio')
         #Aquí tampoc faig res
         pass
  
