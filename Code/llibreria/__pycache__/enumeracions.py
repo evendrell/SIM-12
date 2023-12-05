@@ -8,7 +8,7 @@ class Estat(Enum):
 
 #Amplieu amb aquells tipus d'events que considereu necessaris.
 class TipusEvent(Enum):
-    IniciSimulacii=1
+    IniciSimulacio=1
     FiSimulacio=2
 
 #Amplieu per si voleu usar alhora de treure una traça dels events.

@@ -1,4 +1,4 @@
-from slamiii import *
+from slam import *
 
 class nopActivity(slamiii):
     
@@ -21,6 +21,7 @@ class nopActivity(slamiii):
         pass
     
     def fiSimulacio(self):
+        print('Soc nop i he rebut un fiSimulacio')
         #Aquí tampoc faig res
         pass
  
