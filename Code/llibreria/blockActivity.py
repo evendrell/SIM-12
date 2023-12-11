@@ -1,4 +1,4 @@
-from slam import *
+from slamiii import *
 
 class nopActivity(slamiii):
     
@@ -9,12 +9,10 @@ class nopActivity(slamiii):
         self.parametres=parametres
         
     def __repr__(self):
-        return "nop "+self.id()
+        return "nop"
         
     def tractarEsdeveniment(self, event):
-        #Soc nop no importa el meu estat ni el meu event, simplement deixo passar l'entitat cap endavant
-        #No està implementada la transferència hauria de ser un esdeveniment amb el temps actual i màxima prioritat
-        self.traspassarEntitat(event)
+        #Soc nop no importa el meu estat ni el meu event, simplement no faig res
         pass      
 
     def iniciSimulacio(self):

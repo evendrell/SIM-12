@@ -31,7 +31,6 @@ class motorEventsDiscrets:
             self.tempsSimulacio=properEsdeveniment.tempsExecucio;
             # deleguem l'accio a realitzar de l'esdeveniment a l'objecte que l'ha generat
             properEsdeveniment.perA.tractarEsdeveniment(properEsdeveniment)
-        
         #recollida d'estadistics
         self.fiSimulacio()
 

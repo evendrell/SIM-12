@@ -6,6 +6,7 @@ Treballar amb programació orientat a objectes quan desenvolupem un simulador a 
 3.- Alguna proposta més... ?
 '''
 from enumeracions import *
+from esdeveniment import *
 
 #Fa molt que no programo en python, així que potser ho seu seria fer una interficie o alguna cosa d'aquests que feu el jovent...
 
@@ -25,8 +26,13 @@ class slamiii:
         
     def tractarEsdeveniment(self, event):
         #Que ha de fer el vostre element en funció de l'estat en el que es troba i el tipus d'event
-        assert (False)        
+        assert (False)    
 
+    def traspassarEntitat(self,event):
+        #Ens cal inserir un esdeveniment en la llista d'esdeveniments amb màxima prioritat i temps actual
+        # TODO
+        return
+    
     def iniciSimulacio(self):
         #El vostre element ha de fer quelcom especial quan s'inicia la simulació?
         self.estat=Estat.LLIURE
