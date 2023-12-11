@@ -1,22 +1,24 @@
-from slamiii import *
+from slam import *
 
-class nopActivity(slamiii):
+class blockActivity(slamiii):
     
      # conèixer el motor de simulació pot anar molt bé
     def __init__(self,scheduler,parametres):
-        super(nopActivity, self).__init__(scheduler,parametres)
+        super(blockActivity, self).__init__(scheduler,parametres)
         #Que faig amb parametres, en aquest cas nop
         self.parametres=parametres
         
     def __repr__(self):
-        return "nop"
+        return "block"
         
     def tractarEsdeveniment(self, event):
         #Soc nop no importa el meu estat ni el meu event, simplement no faig res
+        #un altre opcio per a blockejar seria no traspassar l'entitat
         pass      
 
     def iniciSimulacio(self):
-        print('Soc nop i he rebut un iniciSimulacio')
+        self.estat(Estat.BLOQUEJAT)
+        print('Soc block i he rebut un iniciSimulacio')
         #Jo no he de fer res
         pass
     
@@ -25,8 +27,8 @@ class nopActivity(slamiii):
         pass
  
     def acceptaEntitat(self, n):
-        #aquí estic suposant que ho accepto tot, us convenç?
-        return n
+        #aquí estic suposant que n'ho accepto res, us convenç?
+        return 0
     
     def summary(self):
         #Pot ser una bona praxis disposar d'un resum del que ha fet el vostre element al llarg de tota l'execució

@@ -4,8 +4,8 @@ from nopActivity import *
 
 '''
 Inicieu el vostre motor de simulació a partir d'aquesta classe
-
 '''
+
 class motorEventsDiscrets:
     _tempsSimulacio = 0
     # hem de tenir una llista amb els esdeveniments ordenats en el temps
