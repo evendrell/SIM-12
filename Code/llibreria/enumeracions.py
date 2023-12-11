@@ -10,6 +10,7 @@ class Estat(Enum):
 class TipusEvent(Enum):
     IniciSimulacio=1
     FiSimulacio=2
+    TraspasEntitat=3
 
 #Amplieu per si voleu usar alhora de treure una traça dels events.
 class Colors:

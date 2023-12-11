@@ -3,7 +3,6 @@ from enumeracions import *
 class esdeveniment:
     def __init__(self,perA,temps,tipus,entitat=None,desde=None):
             # inicialitzar element de simulacio
-        self.entitatsTractades=0
         self.tipus=tipus
         self.perA=perA
         self.tempsExecucio=temps
