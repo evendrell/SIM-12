@@ -23,3 +23,5 @@ Daniel Morón: Gate
 Juan Emilio Olivan: Move
 Esther Vendrell: Batch
 Javi Abella: Preempt
+
+Link diagrama de blocs: https://app.diagrams.net/#G1sj2vUqeOkVqTZwLi8mdyQItLJ_NeA76W 
