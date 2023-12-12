@@ -25,3 +25,5 @@ Esther Vendrell: Batch
 Javi Abella: Preempt
 
 Link diagrama de blocs: https://app.diagrams.net/#G1sj2vUqeOkVqTZwLi8mdyQItLJ_NeA76W 
+
+Link invitació (sol amb compte "upc.edu": https://drive.google.com/file/d/1sj2vUqeOkVqTZwLi8mdyQItLJ_NeA76W/view?usp=sharing 
