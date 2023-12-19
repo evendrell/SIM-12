@@ -14,12 +14,15 @@ class slamiii:
     #necessiteu afegir algun métode o propietat a la classe slamiii?
     _estat =Estat.LLIURE
     _id=-1
+    _predecessor=None
+    _successor=None
 
      # conèixer el motor de simulació pot anar molt bé
     def __init__(self,scheduler,parameters):
         self.estat=Estat.LLIURE
         self._id=parameters.split(",")[0]
         self.scheduler=scheduler
+        self._predecessor=self.scheduler.doanamActivitat(self._id-1)        
         
     def __repr__(self):
         assert (False)
@@ -35,6 +38,7 @@ class slamiii:
     
     def iniciSimulacio(self):
         #El vostre element ha de fer quelcom especial quan s'inicia la simulació?
+        self._successor=self.donamActivitat(self._id)
         self.estat=Estat.LLIURE
     
     def fiSimulacio(self):

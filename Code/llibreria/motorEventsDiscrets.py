@@ -39,6 +39,9 @@ class motorEventsDiscrets:
         bisect.insort(self.eventList, event)
         a=10
 
+    def donamActivitat(self,index):
+        return self._llistaActivitats[index]
+    
     def carregarModel(self):
         '''
         Aquí hauríeu de llegir un arxiu de text i fer el parser que toqui per a instanciar els elements del model
@@ -62,4 +65,5 @@ class motorEventsDiscrets:
 
 if __name__ == "__main__":
     elMotor = motorEventsDiscrets()
+
     elMotor.run()
