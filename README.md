@@ -26,4 +26,6 @@ Javi Abella: Preempt
 
 Link diagrama de blocs: https://app.diagrams.net/#G1sj2vUqeOkVqTZwLi8mdyQItLJ_NeA76W 
 
-Link invitació (sol amb compte "upc.edu": https://drive.google.com/file/d/1sj2vUqeOkVqTZwLi8mdyQItLJ_NeA76W/view?usp=sharing 
+Link invitació (sol amb compte "upc.edu"): https://drive.google.com/file/d/1sj2vUqeOkVqTZwLi8mdyQItLJ_NeA76W/view?usp=sharing 
+
+Link de la carpeta del drive ( '' ): https://drive.google.com/drive/folders/1DxLod4-3R9rPuKyCAkqZZgcyf_-dB-lq?usp=drive_link 
