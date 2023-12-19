@@ -16,13 +16,15 @@ class slamiii:
     _id=-1
     _predecessor=None
     _successor=None
+    _traspassosPendents=None
 
      # conèixer el motor de simulació pot anar molt bé
     def __init__(self,scheduler,parameters):
         self.estat=Estat.LLIURE
         self._id=parameters.split(",")[0]
         self.scheduler=scheduler
-        self._predecessor=self.scheduler.doanamActivitat(self._id-1)        
+        self._predecessor=self.scheduler.doanamActivitat(self._id-1)   
+        self._traspassosPendents=[]     
         
     def __repr__(self):
         assert (False)
@@ -31,11 +33,29 @@ class slamiii:
         #Que ha de fer el vostre element en funció de l'estat en el que es troba i el tipus d'event
         assert (False)    
 
-    def traspassarEntitat(self,event):
-        #Ens cal inserir un esdeveniment en la llista d'esdeveniments amb màxima prioritat i temps actual
-        # TODO
-        return
-    
+    #cada cop que crideu aquest métode intenteu enviar una entitat a un destí si aquest té capacitat
+    def traspassarEntitat(self,entitat,desti):
+        #esdeveniment que programeu que s'inserirà a la llista d'esdeveniment
+        traspas=esdeveniment(desti,self.scheduler.tempsExecucio,TipusEvent.TraspasEntitat,entitat,self)
+        if (desti.acceptaEntitat(1)):
+            #En aquest punt li diem al motor que afegeixi l'esdeveniment a la posició que li per toca
+            self.scheduler.afegirEsdeveniment(traspas)
+        else:
+            #si no puc afegir el guardo per a més tard
+            self._traspassosPendents.append(traspas)
+
+    #Si algun objecte us demanava d'enviar-vos una entitat cal que us enrecordeu de qui és per poder després cridar el métode traspasHabilitat de l'objecte implicat
+    def traspasHabilitat(self,desti,espai):
+        #Cal que busqueu dins la llista de traspassosPendents aquells esdeveniments que tenen el .perA igual a desti
+        #doncs destí us diu que té espai lliures, per a cada candidat podeu invocar de nou el traspassarEntitat
+
+        #candidat=....
+        
+        #el temps de simulació que teniu en el candidat s'ha d'actualitzar amb el temps actual de simulació.
+
+        #traspassarEntitat(traspas)
+        pass
+                
     def iniciSimulacio(self):
         #El vostre element ha de fer quelcom especial quan s'inicia la simulació?
         self._successor=self.donamActivitat(self._id)
