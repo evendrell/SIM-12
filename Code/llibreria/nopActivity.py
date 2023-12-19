@@ -18,7 +18,7 @@ class nopActivity(slamiii):
         pass      
 
     def iniciSimulacio(self):
-        self.estat(Estat.LLIURE)
+        self.nouEstat(Estat.LLIURE)
         print('Soc nop i he rebut un iniciSimulacio')
         #Jo no he de fer res
         pass

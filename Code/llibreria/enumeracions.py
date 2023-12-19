@@ -5,12 +5,14 @@ class Estat(Enum):
     LLIURE = 1
     SERVEI = 2
     BLOQUEJAT = 3
+    BATCHING = 4
 
 #Amplieu amb aquells tipus d'events que considereu necessaris.
 class TipusEvent(Enum):
     IniciSimulacio=1
     FiSimulacio=2
     TraspasEntitat=3
+    CreaMentitats=4
 
 #Amplieu per si voleu usar alhora de treure una traça dels events.
 class Colors:
