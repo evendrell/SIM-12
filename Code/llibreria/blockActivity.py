@@ -17,7 +17,7 @@ class blockActivity(slamiii):
         pass      
 
     def iniciSimulacio(self):
-        self.estat(Estat.BLOQUEJAT)
+        self.set_estat(Estat.BLOQUEJAT)
         print('Soc block i he rebut un iniciSimulacio')
         #Jo no he de fer res
         pass

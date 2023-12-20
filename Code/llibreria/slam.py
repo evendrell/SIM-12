@@ -12,7 +12,7 @@ from esdeveniment import *
 
 class slamiii:
     #necessiteu afegir algun métode o propietat a la classe slamiii?
-    _estat =Estat.LLIURE
+    _estat=None
     _id=-1
     _predecessor=None
     _successor=None
@@ -20,10 +20,11 @@ class slamiii:
 
      # conèixer el motor de simulació pot anar molt bé
     def __init__(self,scheduler,parameters):
-        self.estat=Estat.LLIURE
-        self._id=parameters.split(",")[0]
+        self.set_estat(Estat.LLIURE)
+        self._id=int(parameters.split(",")[0])
         self.scheduler=scheduler
-        self._predecessor=self.scheduler.doanamActivitat(self._id-1)   
+        if (self._id >= 2): #No podem tenir predecessors si som la primera instrucció del model.
+            self._predecessor=self.scheduler.doanamActivitat(self._id-1)   
         self._traspassosPendents=[]     
         
     def __repr__(self):
@@ -35,8 +36,11 @@ class slamiii:
 
     #cada cop que crideu aquest métode intenteu enviar una entitat a un destí si aquest té capacitat
     def traspassarEntitat(self,entitat,desti):
+        if (desti==None):
+            return #No podem enviar res a None
+        
         #esdeveniment que programeu que s'inserirà a la llista d'esdeveniment
-        traspas=esdeveniment(desti,self.scheduler.tempsExecucio,TipusEvent.TraspasEntitat,entitat,self)
+        traspas=esdeveniment(desti,self.scheduler.temps(),TipusEvent.TraspasEntitat,entitat,self)
         if (desti.acceptaEntitat(1)):
             #En aquest punt li diem al motor que afegeixi l'esdeveniment a la posició que li per toca
             self.scheduler.afegirEsdeveniment(traspas)
@@ -58,7 +62,7 @@ class slamiii:
                 
     def iniciSimulacio(self):
         #El vostre element ha de fer quelcom especial quan s'inicia la simulació?
-        self._successor=self.donamActivitat(self._id)
+        self._successor=self.scheduler.donamActivitat(self._id)
         self.estat=Estat.LLIURE
     
     def fiSimulacio(self):
@@ -68,12 +72,12 @@ class slamiii:
     centralitzar el canvi d'estat us pot anar molt bé per a registrar estadístics i controlar millor el codi
     eviteu fer self._state a qualsevol lloc
     '''
-    def estat(self):
-        return self._estat;
-
-    def nouEstat(self,estat):
+    def set_estat(self,estat):
         self._estat = estat;
-
+    
+    def get_estat(self):
+        return self._estat;
+    
     def id(self):
         return self._id;
 

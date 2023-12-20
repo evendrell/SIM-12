@@ -14,11 +14,11 @@ class nopActivity(slamiii):
     def tractarEsdeveniment(self, event):
         #Soc nop no importa el meu estat ni el meu event, simplement deixo passar l'entitat cap endavant
         #No està implementada la transferència hauria de ser un esdeveniment amb el temps actual i màxima prioritat
-        self.traspassarEntitat(event)
+        self.traspassarEntitat(event.entitat,self._successor)
         pass      
 
     def iniciSimulacio(self):
-        self.nouEstat(Estat.LLIURE)
+        self.set_estat(Estat.LLIURE)
         print('Soc nop i he rebut un iniciSimulacio')
         #Jo no he de fer res
         pass
