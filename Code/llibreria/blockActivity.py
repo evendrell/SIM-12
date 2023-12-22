@@ -17,6 +17,7 @@ class blockActivity(slamiii):
         pass      
 
     def iniciSimulacio(self):
+        super(blockActivity,self).iniciSimulacio()
         self.set_estat(Estat.BLOQUEJAT)
         print('Soc block i he rebut un iniciSimulacio')
         #Jo no he de fer res
@@ -32,6 +33,6 @@ class blockActivity(slamiii):
     
     def summary(self):
         #Pot ser una bona praxis disposar d'un resum del que ha fet el vostre element al llarg de tota l'execució
-        print('Doncs ja estarem')
+        return " EST: 0,0"
         
         

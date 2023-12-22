@@ -17,6 +17,7 @@ class slamiii:
     _predecessor=None
     _successor=None
     _traspassosPendents=None
+    _surten=0
 
      # conèixer el motor de simulació pot anar molt bé
     def __init__(self,scheduler,parameters):
@@ -24,7 +25,7 @@ class slamiii:
         self._id=int(parameters.split(",")[0])
         self.scheduler=scheduler
         if (self._id >= 2): #No podem tenir predecessors si som la primera instrucció del model.
-            self._predecessor=self.scheduler.doanamActivitat(self._id-1)   
+            self._predecessor=self.scheduler.donamActivitat(self._id-1)   
         self._traspassosPendents=[]     
         
     def __repr__(self):
@@ -44,6 +45,7 @@ class slamiii:
         if (desti.acceptaEntitat(1)):
             #En aquest punt li diem al motor que afegeixi l'esdeveniment a la posició que li per toca
             self.scheduler.afegirEsdeveniment(traspas)
+            self._surten=self._surten+1
         else:
             #si no puc afegir el guardo per a més tard
             self._traspassosPendents.append(traspas)
@@ -52,8 +54,10 @@ class slamiii:
     def traspasHabilitat(self,desti,espai):
         #Cal que busqueu dins la llista de traspassosPendents aquells esdeveniments que tenen el .perA igual a desti
         #doncs destí us diu que té espai lliures, per a cada candidat podeu invocar de nou el traspassarEntitat
-
+        
         #candidat=....
+        # candidat.perA==desti traspassarEntitat(candidat.perA,candidat.entitat) i eliminar candidat de la llista
+
         
         #el temps de simulació que teniu en el candidat s'ha d'actualitzar amb el temps actual de simulació.
 
@@ -62,12 +66,13 @@ class slamiii:
                 
     def iniciSimulacio(self):
         #El vostre element ha de fer quelcom especial quan s'inicia la simulació?
-        self._successor=self.scheduler.donamActivitat(self._id)
+        self._successor=self.scheduler.donamActivitat(self._id+1)
         self.estat=Estat.LLIURE
+        self._surten=0
     
     def fiSimulacio(self):
-        #El vostre element ha de fer quelcom especial quan acaba la simulació
-        assert (False)
+        #El vostre element ha d'invocar el super.fiSimulacio
+        self.summary()
     '''
     centralitzar el canvi d'estat us pot anar molt bé per a registrar estadístics i controlar millor el codi
     eviteu fer self._state a qualsevol lloc
@@ -88,6 +93,7 @@ class slamiii:
     
     def summary(self):
         #Pot ser una bona praxis disposar d'un resum del que ha fet el vostre element al llarg de tota l'execució
+        print("mnty")
         assert (False)
         
         

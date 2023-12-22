@@ -70,8 +70,7 @@ class batch(slamiii):
         pass
     
     def fiSimulacio(self):
-        #Aquí tampoc faig res
-        self.summary()
+        super(batch,self).fiSimulacio()
     
     # dir si accepto entitat (en principi tots)
     def acceptaEntitat(self, n):
@@ -81,7 +80,7 @@ class batch(slamiii):
     # estaditics quants elements han pasat per aqui i quants hem creat
     def summary(self):
         #Mostrar els estadístics per pantalla amb el nom, format desitjat 
-        print(Colors.OKBLUE,self,Colors.ENDC,self.estadisticProcessades,' ',self.estadisticCreades)
+        return " EST: "+str(self.estadisticProcessades)+' '+str(self.estadisticCreades)
         
         
         
