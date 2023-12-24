@@ -1,8 +1,10 @@
 # SIM-12
 
+Treballeu a la vostra branca, quan tingueu el codi sense errors podeu fer merge perquè jo us pugui donar feedback abans de l'avaluació o m'aviseu i em miro el vostre codi en la vostra branca.
 Python 3.0 ?
 
 Relació objectes:
+
 Eduard Marchena: Destroy
 Pol Perez: Close
 Paulla Barrachina: Open
