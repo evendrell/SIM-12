@@ -1,13 +1,28 @@
 import sys,os
-import curses
+import unicurses as curses
 from motorEventsDiscrets import motorEventsDiscrets
+  
+def main():
+    # Inicialización manual de unicurses
+    stdscr = curses.initscr()  # Inicializa la pantalla
+    curses.curs_set(0)  # Oculta el cursor
+    stdscr.clear()  # Limpia la pantalla
+    stdscr.refresh()  # Actualiza la pantalla
+    
+    # Obtiene el tamaño de la pantalla
+    height, width = stdscr.getmaxyx()
 
-def draw_menu(stdscr):
-    # Clear and refresh the screen for a blank canvas
-    stdscr.clear()
+    # Imprime un mensaje en el centro de la pantalla
+    message = "Estem a punt d'arrancar la pràctica"
+    y = height // 2
+    x = (width - len(message)) // 2
+    stdscr.addstr(y, x, message)
     stdscr.refresh()
 
-    # Start colors in curses
+    # Espera a que el usuario presione una tecla
+    stdscr.getch()
+
+    # Start colors in unicurses
     curses.start_color()
     curses.init_pair(1, curses.COLOR_CYAN, curses.COLOR_BLACK)
     curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)
@@ -18,10 +33,10 @@ def draw_menu(stdscr):
 
     motor=motorEventsDiscrets()
     motor.run(stdscr)
+    curses.endwin()
+    # Limpieza manual de unicurses
     
-
-def main():
-    curses.wrapper(draw_menu)
+    curses.endwin()  # Finaliza la aplicación de curses
 
 if __name__ == "__main__":
     main()

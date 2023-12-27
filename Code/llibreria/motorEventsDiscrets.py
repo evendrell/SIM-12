@@ -3,7 +3,7 @@ from esdeveniment import *
 from nopActivity import *
 from blockActivity import *
 from batch import *
-import curses 
+import unicurses as curses
 import time
 
 
@@ -17,7 +17,7 @@ class motorEventsDiscrets:
     _llistaEsdeveniments = []
     _llistaActivitats = []
     debug=False
-    milisegons=float(0.250)
+    milisegons=float(0.0250)
     
     def __init__(self):
         primerEsdeveniment=esdeveniment(self,0,TipusEvent.IniciSimulacio,None)
@@ -67,7 +67,7 @@ class motorEventsDiscrets:
         if first:
             statusbarstr = "Prem 'd' per a executar pas a pas"
         else:
-            statusbarstr = ("Press una tecla per executar l'event de tipus {} que succeirà en l'instant {}").format(executare.tipus,executare.tempsExecucio)
+            statusbarstr = ("Prem 'd' per executar l'event de tipus {} que succeirà en l'instant {}").format(executare.tipus,executare.tempsExecucio)
         stdscr.attron(curses.color_pair(6))
         stdscr.addstr(height-1, 0, statusbarstr)
         stdscr.addstr(height-1, len(statusbarstr), " " * (width - len(statusbarstr) - 1))
@@ -86,7 +86,7 @@ class motorEventsDiscrets:
         # Demanem el següent pas si venim en mode debug
         if (dbg):
             k = stdscr.getch()
-            self.debug=(k=="d")
+            self.debug=(k==100)
         else:
             time.sleep(self.milisegons)
 
@@ -128,7 +128,7 @@ class motorEventsDiscrets:
     def carregarModel(self):
         index=0
         self.programa=[]
-        with open('llibreria/model.txt') as f:
+        with open('Fons_comu/model.txt') as f:
             linies = f.readlines()
             for linia in linies:
                 guio=linia.rstrip("\n")
@@ -145,12 +145,12 @@ class motorEventsDiscrets:
     def instanciar(self,activitat):
         element=None
         creat=False
-        if 'batch' in activitat:
-            creat=True
-            element=batch(self,activitat)
         if 'block' in activitat:
             creat=True
             element=blockActivity(self,activitat)
+        if 'batch' in activitat:
+            creat=True
+            element=batch(self,activitat)
         if not creat:
             element=nopActivity(self,activitat)
         
@@ -165,8 +165,8 @@ class motorEventsDiscrets:
             self.iniciSimulacio()
             #puc programar un o més traspasEntitat al meu objecte
             self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),0,0))
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),0,0))
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),0,0))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.TraspasEntitat,entitat(),0,0))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),0,0))
             
     def fiSimulacio(self):
         for activitat in self._llistaActivitats:
