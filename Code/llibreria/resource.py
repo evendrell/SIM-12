@@ -13,49 +13,31 @@ class resource(slamiii):
 
         self.n = int(lista_atributos[2])
         self.set_estat(Estat.LLIURE)
-        #Esther, al final no necessita la cua per emmagatzemar temporalment les entitats pq sols usem el LAST com a métode d'assignació dels atributs de la nova entitat
-        #self.cola = Queue(maxsize=self.m)
-        self.novaEntitat = None
-        self.entitatsProcesades = 0
-        
-        self.estadisticProcessades=0
-        self.estadisticCreades=0
+        self.cola = Queue(maxsize=self.n)
+        self.instancies_disponibles = self.n
     
     def __repr__(self):
         return "resource"
 
     # se programa el diagrama que hemos hecho
     def tractarEsdeveniment(self, event):
-        ''' 
-        El tractament d'esdeveniments és la codificació del diagrama de processos, podeu fer com l'Esther i preguntar per a cada 
-        estat que s'ha de fer quan es rep un esdeveniment.
-        '''
         if self.get_estat() == Estat.LLIURE:
+
             if event.tipus == TipusEvent.TraspasEntitat:
-                #Esther no et cat ja fer servir la cua
-                # hago cola y aculumo entidades
-                #self.cola.put(event.entitat)
-                self.novaEntitat=entitat()
-                self.entitatsProcesades=1
-                self.estadisticProcessades=self.estadisticProcessades+1
-                self.set_estat(Estat.RESOURCING)
-                #TODO aquí hauries de comprovar que no tinguis el paquet ja fet (i modificar el diagrama de processos) podria donar-se el cas de que et diu fer un batch amb una sola entitat.
+                if event.prioritat :
+                    self.traspassarEntitat(entitat, self._successor)
+                else :
+                    self.cola.put(entitat)
+                    self.instancies_disponibles += 1
+                    self.set_estat(Estat.RESOURCING)
         
         elif self.get_estat() == Estat.RESOURCING:
-            if event.tipus == TipusEvent.TraspasEntitat:
-                #self.actualitzarAtributs(event.entitat) # de self.sortida
-                self.entitatsProcesades=self.entitatsProcesades+1
-                self.estadisticProcessades=self.estadisticProcessades+1
-                if self.entitatsProcesades == self.n:
-                    self.estadisticCreades=self.estadisticCreades+1
-                    #Arribat aquest punt, he processat n entitats, el batch ja pot provar d'enviar l'entitat cap al seu successor
-                    self.traspassarEntitat(self.novaEntitat,self._successor)
-                    #Esther ho he promogut a la classe pare pq tothom pugui fer el mateix, ja fareu net el codi.
-                    #if self._successor.acceptaEntitat(1):
-                    #    self.scheduler.afegirEsdeveniment(esdeveniment(self._successor,event.tempsExecucio, TipusEvent.TraspasEntitat, self.novaEntitat, self))
-                    #else:
-                    #    self.pendents.append(self.novaEntitat)
-                    self.set_estat(Estat.LLIURE)
+            while not self.cola.empty() and self.instancies_disponibles > 0:
+                entitat = self.cola.get()
+                self.instancies_disponibles -= 1
+                self.traspassarEntitat(entitat, self._successor)
+            
+            self.set_estat(Estat.LLIURE)
 
     def iniciSimulacio(self):
         #TODO la classe pare manega el successor
@@ -67,9 +49,14 @@ class resource(slamiii):
         super(resource,self).fiSimulacio()
     
     # dir si accepto entitat (en principi tots)
-    def acceptaEntitat(self, n):
-        #aquí estic suposant que ho accepto tot, us convenç?
-        return n
+        
+
+
+    def acceptaEntitat(self):
+        #nomes acceptem entitats si hi caben a la cua
+        return self.cola.size() <= self.n 
+            
+        
     
     # estaditics quants elements han pasat per aqui i quants hem creat
     def summary(self):
@@ -78,3 +65,10 @@ class resource(slamiii):
         
         
         
+
+
+
+
+
+
+
