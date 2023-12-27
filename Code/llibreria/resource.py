@@ -10,25 +10,19 @@ class resource(slamiii):
         #Que faig amb parametres, en aquest cas nop
         self.parametres=parametres
         lista_atributos = parametres.split(',')
-        #Esther t'he corregit l'accés als paràmetres dons els dos primers són l'identificador de l'activitat i el tipus activitat
-        #Atenció tots, recordeu a forçar el tipus del paràmetre
+
         self.n = int(lista_atributos[2])
-        self.action = lista_atributos[3]
-        self.m = int(lista_atributos[4])
         self.set_estat(Estat.LLIURE)
         #Esther, al final no necessita la cua per emmagatzemar temporalment les entitats pq sols usem el LAST com a métode d'assignació dels atributs de la nova entitat
         #self.cola = Queue(maxsize=self.m)
         self.novaEntitat = None
         self.entitatsProcesades = 0
+        
         self.estadisticProcessades=0
         self.estadisticCreades=0
     
     def __repr__(self):
         return "resource"
-    
-    def actualitzarAtributs(self, entitat):
-        if self.action == "LAST":
-            self.novaEntitat.atributs = entitat.atributs
 
     # se programa el diagrama que hemos hecho
     def tractarEsdeveniment(self, event):
@@ -49,7 +43,7 @@ class resource(slamiii):
         
         elif self.get_estat() == Estat.RESOURCING:
             if event.tipus == TipusEvent.TraspasEntitat:
-                self.actualitzarAtributs(event.entitat) # de self.sortida
+                #self.actualitzarAtributs(event.entitat) # de self.sortida
                 self.entitatsProcesades=self.entitatsProcesades+1
                 self.estadisticProcessades=self.estadisticProcessades+1
                 if self.entitatsProcesades == self.n:
