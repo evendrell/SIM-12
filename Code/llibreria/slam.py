@@ -18,6 +18,9 @@ class slamiii:
     _successor=None
     _traspassosPendents=None
     _surten=0
+    x=0
+    y=0
+    z=0
 
      # conèixer el motor de simulació pot anar molt bé
     def __init__(self,scheduler,parameters):
@@ -69,6 +72,9 @@ class slamiii:
         self._successor=self.scheduler.donamActivitat(self._id+1)
         self.estat=Estat.LLIURE
         self._surten=0
+        self.x=0
+        self.y=0
+        self.z=0
     
     def fiSimulacio(self):
         #El vostre element ha d'invocar el super.fiSimulacio
@@ -82,6 +88,26 @@ class slamiii:
     
     def get_estat(self):
         return self._estat;
+    
+    def set_X(self, value):
+        self.x = value;
+
+    def get_X(self):
+        return self.x;
+    
+    def set_Y(self, value):
+        self.y = value;
+
+    def get_Y(self):
+        return self.y;
+    
+    def set_Z(self, value):
+        self.z = value;
+
+    def get_Z(self):
+        return self.z;
+    
+    
     
     def id(self):
         return self._id;
