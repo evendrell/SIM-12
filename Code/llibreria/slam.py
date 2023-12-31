@@ -59,15 +59,22 @@ class slamiii:
     def traspasHabilitat(self,desti,espai):
         #Cal que busqueu dins la llista de traspassosPendents aquells esdeveniments que tenen el .perA igual a desti
         #doncs destí us diu que té espai lliures, per a cada candidat podeu invocar de nou el traspassarEntitat
-        
+        candidats = [traspas for traspas in self._traspassosPendents if traspas.perA == desti]
         #candidat=....
         # candidat.perA==desti traspassarEntitat(candidat.perA,candidat.entitat) i eliminar candidat de la llista
 
         
         #el temps de simulació que teniu en el candidat s'ha d'actualitzar amb el temps actual de simulació.
 
-        #traspassarEntitat(traspas)
-        pass
+        for candidat in candidats:
+            # Actualizar el tiempo de simulación en el candidato
+            candidat.tempsExecucio = self.scheduler.temps()
+
+            # Llamar a traspassarEntitat para cada candidato
+            self.traspassarEntitat(candidat.entitat, desti)
+
+            # Eliminar el candidato de la lista de traslados pendientes
+            self._traspassosPendents.remove(candidat)
                 
     def iniciSimulacio(self):
         #El vostre element ha de fer quelcom especial quan s'inicia la simulació?
@@ -109,8 +116,6 @@ class slamiii:
 
     def get_Z(self):
         return self.z;
-    
-    
     
     def id(self):
         return self._id;

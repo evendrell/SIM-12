@@ -4,6 +4,7 @@ from nopActivity import *
 from blockActivity import *
 from batch import *
 from detect import *
+from gate import *
 import curses
 import time
 
@@ -155,6 +156,9 @@ class motorEventsDiscrets:
         if 'detect' in activitat:
             creat=True
             element=detect(self, activitat)
+        if 'gate' in activitat:
+            creat=True
+            element=gate(self,activitat)
         if not creat:
             element=nopActivity(self,activitat)
         

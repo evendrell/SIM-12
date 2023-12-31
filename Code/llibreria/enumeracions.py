@@ -6,13 +6,19 @@ class Estat(Enum):
     SERVEI = 2
     BLOQUEJAT = 3
     BATCHING = 4
-
+    OBERTA = 240
+    TANCADA = 241
 #Amplieu amb aquells tipus d'events que considereu necessaris.
 class TipusEvent(Enum):
     IniciSimulacio=1
     FiSimulacio=2
     TraspasEntitat=3
     CreaMentitats=4
+    ObrirPorta=240
+    TancarPorta=241
+    ObrirPortaEnTTics=242
+    EstaLaPortaOberta=243
+    EsticOberta=244
 
 #Amplieu per si voleu usar alhora de treure una traça dels events.
 class Colors:
