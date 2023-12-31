@@ -1,5 +1,5 @@
 import sys,os
-import unicurses as curses
+import curses
 from motorEventsDiscrets import motorEventsDiscrets
   
 def main():

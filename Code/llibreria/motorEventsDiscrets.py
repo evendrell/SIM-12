@@ -3,7 +3,8 @@ from esdeveniment import *
 from nopActivity import *
 from blockActivity import *
 from batch import *
-import unicurses as curses
+from gate import *
+import curses
 import time
 
 
@@ -151,6 +152,9 @@ class motorEventsDiscrets:
         if 'batch' in activitat:
             creat=True
             element=batch(self,activitat)
+        if 'gate' in activitat:
+            creat=True
+            element=gate(self,activitat)
         if not creat:
             element=nopActivity(self,activitat)
         
