@@ -7,7 +7,7 @@ Relació objectes:
 
 Eduard Marchena: Destroy
 Pol Perez: Close
-Paulla Barrachina: Open
+Paula Barrachina: Open
 Miguel Nuñez: Accumulate
 Marc Castro: Create
 Sergio Utrero: Queue
