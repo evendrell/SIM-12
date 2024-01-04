@@ -19,6 +19,8 @@ class slamiii:
     _traspassosPendents=None
     _surten=0
 
+    _X=0
+
      # conèixer el motor de simulació pot anar molt bé
     def __init__(self,scheduler,parameters):
         self.set_estat(Estat.LLIURE)
