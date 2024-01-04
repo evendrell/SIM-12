@@ -26,8 +26,8 @@ class detect(slamiii):
         state = self.get_estat()
         
         if state == Estat.LLIURE and event.tipus == TipusEvent.TraspasEntitat:
-            if self.get_Z() == self.VAL:
-                self.set_Z(0)
+            if slamiii.get_Z(slamiii) == self.VAL:
+                slamiii.set_Z(slamiii, 0)
                 self.createMEntitiesInTTicks(event)   
                 self.processaEntitats(total=1, entitats=[event.entitat], estatACambiar=Estat.SERVEI)                                              
             
@@ -69,6 +69,6 @@ class detect(slamiii):
         return n
     
     def summary(self):
-        return " EST: "+str(self.estadisticEntrades)+' '+str(self.estadisticSortides) + ' z: ' + str(self.get_Z())
+        return " EST: "+str(self.estadisticEntrades)+' '+str(self.estadisticSortides) + ' z: ' + str(slamiii.get_Z(slamiii))
         
         

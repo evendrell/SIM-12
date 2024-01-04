@@ -72,9 +72,10 @@ class slamiii:
         self._successor=self.scheduler.donamActivitat(self._id+1)
         self.estat=Estat.LLIURE
         self._surten=0
-        self.x=0
-        self.y=0
-        self.z=0
+        slamiii.set_X(slamiii, 0)
+        slamiii.set_Y(slamiii, 0)
+        slamiii.set_Z(slamiii, 0)
+
     
     def fiSimulacio(self):
         #El vostre element ha d'invocar el super.fiSimulacio
