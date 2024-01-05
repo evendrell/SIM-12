@@ -13,6 +13,7 @@ class TipusEvent(Enum):
     FiSimulacio=2
     TraspasEntitat=3
     CreaMentitats=4
+    ObrirMoveEnTTics=180
 
 #Amplieu per si voleu usar alhora de treure una traça dels events.
 class Colors:
