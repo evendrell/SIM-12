@@ -2,14 +2,14 @@ from slam import *
 
 class select(slamiii):
 
-    
+
    
 
 
 
     #Código chorizeado
     def iniciSimulacio(self):
-        super(nopActivity, self).iniciSimulacio()
+        super(select, self).iniciSimulacio()
         self.entren=0
         self.set_estat(Estat.LLIURE)
         print('Soc nop i he rebut un iniciSimulacio')
