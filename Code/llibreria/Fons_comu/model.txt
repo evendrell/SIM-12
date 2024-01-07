@@ -1,6 +1,4 @@
-create,30,5,2
-batch,3,LAST,1
-unbatch,10,6,7
+gate,3
 nop,
 nop,
 nop,

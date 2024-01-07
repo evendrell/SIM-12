@@ -3,6 +3,8 @@ from esdeveniment import *
 from nopActivity import *
 from blockActivity import *
 from batch import *
+from detect import *
+from gate import *
 from move import *
 import curses
 import time
@@ -152,6 +154,12 @@ class motorEventsDiscrets:
         if 'batch' in activitat:
             creat=True
             element=batch(self,activitat)
+        if 'detect' in activitat:
+            creat=True
+            element=detect(self, activitat)
+        if 'gate' in activitat:
+            creat=True
+            element=gate(self,activitat)
         if 'move' in activitat:
             creat = True
             element = move(self, activitat)
@@ -168,9 +176,16 @@ class motorEventsDiscrets:
         if (esdevenimentActual.tipus==TipusEvent.IniciSimulacio):
             self.iniciSimulacio()
             #puc programar un o més traspasEntitat al meu objecte
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),0,0))
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.TraspasEntitat,entitat(),0,0))
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),0,0))
+            #self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),0,0))
+            #self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.TraspasEntitat,entitat(),0,0))
+            #self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),0,0))
+            # nopInstance = nopActivity(self, "nop,0")
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),nopInstance,0))
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],5,TipusEvent.EstaLaPortaOberta,entitat(),nopInstance,0))
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.ObrirPortaEnTTics,entitat(),nopInstance,0))
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),nopInstance,0))
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],5,TipusEvent.EstaLaPortaOberta,entitat(),nopInstance,0))
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],30,TipusEvent.TancarPorta,entitat(),nopInstance,0))
             
     def fiSimulacio(self):
         for activitat in self._llistaActivitats:
