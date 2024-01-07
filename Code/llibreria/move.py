@@ -90,7 +90,9 @@ class move(slamiii):
  
     def acceptaEntitat(self, n):
         #aquí estic suposant que ho accepto tot, us convenç?
-        return n
+        if (self.get_estat()== Estat.SERVEI):
+            return True
+        return False
     
     def summary(self):
         #Pot ser una bona praxis disposar d'un resum del que ha fet el vostre element al llarg de tota l'execució
