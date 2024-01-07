@@ -29,6 +29,9 @@ class move(slamiii):
         self.entrades = 0
         self.sortidesGate = 0
         self.sortidesMove = 0
+
+        self.currentEntityOrNull = None
+        self.entitiesThatHaveEntered = []
         
     def __repr__(self):
         return "move "+str(self.id())
@@ -44,46 +47,62 @@ class move(slamiii):
 
             #Si ens arriba una entitat...
             if event.tipus == TipusEvent.TraspasEntitat:
-                # print("ENTITY ARRIVES")
+
+                self.currentEntityOrNull = event.entitat._id
+                self.entitiesThatHaveEntered.append(event.entitat._id)
 
                 self.entrades+=1
+
+                # Actualitzem estat a servei
+                self.set_estat(Estat.SERVEI)
+
+                # programem el obriment del MOVE (self) en T ticks
+                # if self.Gate.esticOberta():
+                obrirSelfEnTtics = esdeveniment(perA=self, temps=self.scheduler.temps() + self.T,
+                                                tipus=TipusEvent.ObrirMoveEnTTics,
+                                                entitat=event.entitat, desde=self)
+                self.scheduler.afegirEsdeveniment(obrirSelfEnTtics)
 
                 #programem el obriment de la GATE
                 intentarEntrarAPorta = esdeveniment(perA=self.Gate, temps=self.scheduler.temps(), tipus=TipusEvent.EstaLaPortaOberta,
                                        entitat=event.entitat, desde=self, prioritat=0)
                 self.scheduler.afegirEsdeveniment(intentarEntrarAPorta)
 
-                #programem el obriment del MOVE (self) en T ticks
-                obrirSelfEnTtics = esdeveniment(perA=self, temps=self.scheduler.temps() + self.T,
-                                                    tipus=TipusEvent.ObrirMoveEnTTics,
-                                                    entitat=event.entitat, desde=self)
-                self.scheduler.afegirEsdeveniment(obrirSelfEnTtics)
-
-                # Actualitzem estat a servei
-                self.set_estat(Estat.SERVEI)
 
         elif currentState == Estat.SERVEI:
             if event.tipus == TipusEvent.EsticOberta:
-                # Si la porta està oberta, li traspasso l'entitat
-                self.traspassarEntitat(event.entitat, self.Gate)
+                if event.entitat._id == self.currentEntityOrNull:
+                    # Si la porta està oberta, li traspasso l'entitat
+                    self.traspassarEntitat(event.entitat, self.Gate)
 
 
-                # Actualitzem estat a lliure
-                self.set_estat(Estat.LLIURE)
-                self.avisarAgentesDelBufferDeEntidadesPendientes()
+                    # Actualitzem estat a lliure
+                    self.set_estat(Estat.LLIURE)
+                    self.avisarAgentesDelBufferDeEntidadesPendientes()
+                    self.currentEntityOrNull = None
 
-                self.sortidesGate += 1
+                    self.sortidesGate += 1
+
+
+                else:
+                    print("Soc Move i he rebut un EsticOberta d'una entitat que no és la que estic tractant")
+                    pass
 
             elif event.tipus == TipusEvent.ObrirMoveEnTTics:
-                # Si han passat els T ticks, traspasso l'entitat al següent
-                self.traspassarEntitat(event.entitat, self._successor)
-                print("Soc Move i ha passat una entitat al següent")
+                if event.entitat._id == self.currentEntityOrNull:
+                    # Si han passat els T ticks, traspasso l'entitat al següent
+                    self.traspassarEntitat(event.entitat, self._successor)
+                    print("Soc Move i ha passat una entitat al següent")
 
-                # Actualitzem estat a lliure
-                self.set_estat(Estat.LLIURE)
-                self.avisarAgentesDelBufferDeEntidadesPendientes()
+                    # Actualitzem estat a lliure
+                    self.set_estat(Estat.LLIURE)
+                    self.avisarAgentesDelBufferDeEntidadesPendientes()
+                    self.currentEntityOrNull = None
 
-                self.sortidesMove += 1
+                    self.sortidesMove += 1
+                else:
+                    print("Soc Move i he rebut un ObrirMoveEnTTics d'una entitat que no és la que estic tractant")
+                    pass
 
             #Si mentres estic ocupat tractant una entitat, n'entra una altra
             elif event.tipus == TipusEvent.TraspasEntitat:
@@ -109,8 +128,9 @@ class move(slamiii):
     
     def summary(self):
         #Pot ser una bona praxis disposar d'un resum del que ha fet el vostre element al llarg de tota l'execució
-        return " EST --> entrades: "+str(self.entrades)+' | sortides a Gate: '+str(self.sortidesGate)+' | sortides normals (continuació del flux): '+str(self.sortidesMove)
+        return " EST --> entr: "+str(self.entrades)+' | sort.G: '+str(self.sortidesGate)+' | sort.N: '+str(self.sortidesMove) + ' | entidades +' + str(self.entitiesThatHaveEntered)
 
     def set_gate_reference(self, global_gate_reference):
+        print("Soc move i he rebut una referència a la porta: " + str(global_gate_reference))
         self.Gate = global_gate_reference
         

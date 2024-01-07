@@ -57,8 +57,9 @@ class gate(slamiii):
         currentState = self.get_estat()
         
         if currentState == Estat.OBERTA:
-            # print("GATE OPEN")
+            print("GATE OPEN")
             if event.tipus == TipusEvent.EstaLaPortaOberta:
+                print("   and Evento es EstaLaPortaOberta")
                 traspas=esdeveniment(perA=event.desde,temps=self.scheduler.temps(),tipus=TipusEvent.EsticOberta,entitat=event.entitat,desde=self, prioritat=0)
                 self.scheduler.afegirEsdeveniment(traspas)
                 
@@ -66,7 +67,7 @@ class gate(slamiii):
                 self.tancaPorta()
                   
             elif event.tipus == TipusEvent.TraspasEntitat:
-                # print("GATE TRASP.")
+                print("GATE TRASP.")
                 self.estadisticEntrades += 1
                 self.traspassarEntitat(event.entitat,self._successor)
         elif currentState == Estat.TANCADA:
@@ -99,5 +100,5 @@ class gate(slamiii):
         return self.get_estat() == Estat.OBERTA
     
     def summary(self):
-        return " EST: "+str(self.estadisticEntrades)+' '+str(self._surten) + ' z: '+ str(self.get_Z()) + ' IDs de les entitats que han preguntat: ' + str(self.esta_oberta_list)
+        return " EST: "+str(self.estadisticEntrades)+' '+str(self._surten) + ' z: '+ str(self.get_Z()) + ' IDs de preguntat: ' + str(self.esta_oberta_list) + ' IDs de traspas: ' + str(self.entitats_list)
             

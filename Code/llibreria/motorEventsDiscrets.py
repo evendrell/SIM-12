@@ -58,9 +58,13 @@ class motorEventsDiscrets:
                 index=4
             
             
-            stdscr.addstr(y+i,25, instruccio,curses.color_pair(index))
+            stdscr.addstr(y+i,25, instruccio,curses.color_pair(3))
             stdscr.addstr(y+i,50, self._llistaActivitats[i].summary(),curses.color_pair(index))
-            stdscr.addstr(y+i,1, str(self._llistaActivitats[i].get_estat()).capitalize(),curses.color_pair(index))           
+            stdscr.addstr(y+i,1, str(self._llistaActivitats[i].get_estat()).capitalize(),curses.color_pair(index))
+
+            # print(instruccio)
+            # print(self._llistaActivitats[i].summary())
+            # print(str(self._llistaActivitats[i].get_estat()).capitalize())
 
     def renderStatus(self,stdscr,height,width,executare,first):
         stdscr.attron(curses.color_pair(2))
@@ -162,12 +166,14 @@ class motorEventsDiscrets:
         if 'gate' in activitat:
             creat=True
             element=gate(self,activitat)
-            global_gate_reference = element
+            # global_gate_reference = element
+            # print("Soc motorEventsDiscrets i he creat una porta: " + str(global_gate_reference))
         if 'move' in activitat:
             creat = True
             element = move(self, activitat)
-            element.set_gate_reference(global_gate_reference)
-            # element.set_gate_reference(self._llistaActivitats[1])
+            # element.set_gate_reference(global_gate_reference)
+            element.set_gate_reference(self._llistaActivitats[0])
+            print("Desde la cració del move rescato la ref.: " + str(self._llistaActivitats[0]))
             global_gate_reference = None
         if not creat:
             element=nopActivity(self,activitat)
@@ -187,20 +193,24 @@ class motorEventsDiscrets:
             #self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),0,0))
             # nopInstance = nopActivity(self, "nop,0")
 
+            entities = [entitat() for i in range(3, 10)]
+            for e in entities:
+                e.id = range(3,10)[entities.index(e)]
+
             #Abrimos puerta
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0], 0, TipusEvent.ObrirPorta, entitat(),self._llistaActivitats[0],0))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0], 0, TipusEvent.ObrirPorta, entities[4],self._llistaActivitats[0],0))
 
             #Puerta abierta, traspasamos entidades a Gate y Move
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),self._llistaActivitats[2]))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entities[0],self._llistaActivitats[2]))
 
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[1],5,TipusEvent.TraspasEntitat,entitat(),self._llistaActivitats[2]))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[1],5,TipusEvent.TraspasEntitat,entities[1],self._llistaActivitats[2]))
                 # Move --> Gate open? --> Gate open --> Move --> gate(entity)
 
             #Cerramos puerta
-        #    self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0], 10, TipusEvent.TancarPorta, entitat(),self._llistaActivitats[0]))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0], 10, TipusEvent.TancarPorta, entities[5],self._llistaActivitats[0]))
 
             #Puerta cerrada, traspasamos entidades a Move
-       #     self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[1], 5, TipusEvent.TraspasEntitat, entitat(),self._llistaActivitats[2]))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[1], 15, TipusEvent.TraspasEntitat, entities[2],self._llistaActivitats[2]))
                 # Move --> Gate open?
                         #--> Gate closed
 
