@@ -14,6 +14,8 @@ import time
 Inicieu el vostre motor de simulació a partir d'aquesta classe
 '''
 
+global_gate_reference = None
+
 class motorEventsDiscrets:
     _tempsSimulacio = 0
     # hem de tenir una llista amb els esdeveniments ordenats en el temps
@@ -160,9 +162,13 @@ class motorEventsDiscrets:
         if 'gate' in activitat:
             creat=True
             element=gate(self,activitat)
+            global_gate_reference = element
         if 'move' in activitat:
             creat = True
             element = move(self, activitat)
+            element.set_gate_reference(global_gate_reference)
+            # element.set_gate_reference(self._llistaActivitats[1])
+            global_gate_reference = None
         if not creat:
             element=nopActivity(self,activitat)
         
@@ -180,13 +186,34 @@ class motorEventsDiscrets:
             #self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.TraspasEntitat,entitat(),0,0))
             #self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),0,0))
             # nopInstance = nopActivity(self, "nop,0")
-            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),nopInstance,0))
-            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],5,TipusEvent.EstaLaPortaOberta,entitat(),nopInstance,0))
-            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.ObrirPortaEnTTics,entitat(),nopInstance,0))
-            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),nopInstance,0))
-            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],5,TipusEvent.EstaLaPortaOberta,entitat(),nopInstance,0))
-            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],30,TipusEvent.TancarPorta,entitat(),nopInstance,0))
-            
+
+            #Abrimos puerta
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0], 0, TipusEvent.ObrirPorta, entitat(),self._llistaActivitats[0],0))
+
+            #Puerta abierta, traspasamos entidades a Gate y Move
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),self._llistaActivitats[2]))
+
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[1],5,TipusEvent.TraspasEntitat,entitat(),self._llistaActivitats[2]))
+                # Move --> Gate open? --> Gate open --> Move --> gate(entity)
+
+            #Cerramos puerta
+        #    self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0], 10, TipusEvent.TancarPorta, entitat(),self._llistaActivitats[0]))
+
+            #Puerta cerrada, traspasamos entidades a Move
+       #     self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[1], 5, TipusEvent.TraspasEntitat, entitat(),self._llistaActivitats[2]))
+                # Move --> Gate open?
+                        #--> Gate closed
+
+                # Move pasan T ticks (4t) --> Move deja pasar la entidad
+                #la puerta esta cerrada, las entidades se mueren
+
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],15,TipusEvent.ObrirPortaEnTTics,entitat(),self._llistaActivitats[0]))
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),nopInstance))
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],5,TipusEvent.EstaLaPortaOberta,entitat(),nopInstance))
+            # self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],30,TipusEvent.TancarPorta,entitat(),nopInstance))
+
+            # self.afegirEsdeveniment(
+            #     esdeveniment(self._llistaActivitats[0], 0, TipusEvent.TraspasEntitat, entitat(), nopInstance, 0))
     def fiSimulacio(self):
         for activitat in self._llistaActivitats:
             activitat.fiSimulacio()

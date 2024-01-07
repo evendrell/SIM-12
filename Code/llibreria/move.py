@@ -1,5 +1,9 @@
 from slam import *
 
+
+
+
+
 class move(slamiii):
     entren=0
      # conèixer el motor de simulació pot anar molt bé
@@ -10,8 +14,12 @@ class move(slamiii):
         parametres_list = parametres.split(',')
 
         # Nombre de tics
-        self.T = int(parametres_list[1])
-        self.Gate = int(parametres_list[2])
+        self.T = int(parametres_list[2])
+        self.Gate = parametres_list[3]
+
+
+        #Objectes que tenen entitats pendents d'entrar al move
+        self.pendent_entities_buffer = []
 
         # Actualitzem estat inicial
         # Usem Lliure i Servei en comptes d'IDLE i WAITING
@@ -24,6 +32,10 @@ class move(slamiii):
         
     def __repr__(self):
         return "move "+str(self.id())
+
+    def avisarAgentesDelBufferDeEntidadesPendientes(self):
+        for objecteSim in self.pendent_entities_buffer:
+            objecteSim.traspasHabilitat(self, 1)
         
     def tractarEsdeveniment(self, event):
         currentState = self.get_estat()
@@ -32,11 +44,13 @@ class move(slamiii):
 
             #Si ens arriba una entitat...
             if event.tipus == TipusEvent.TraspasEntitat:
+                # print("ENTITY ARRIVES")
+
                 self.entrades+=1
 
                 #programem el obriment de la GATE
                 intentarEntrarAPorta = esdeveniment(perA=self.Gate, temps=self.scheduler.temps(), tipus=TipusEvent.EstaLaPortaOberta,
-                                       entitat=event.entitat, desde=self)
+                                       entitat=event.entitat, desde=self, prioritat=0)
                 self.scheduler.afegirEsdeveniment(intentarEntrarAPorta)
 
                 #programem el obriment del MOVE (self) en T ticks
@@ -56,25 +70,24 @@ class move(slamiii):
 
                 # Actualitzem estat a lliure
                 self.set_estat(Estat.LLIURE)
+                self.avisarAgentesDelBufferDeEntidadesPendientes()
 
                 self.sortidesGate += 1
 
             elif event.tipus == TipusEvent.ObrirMoveEnTTics:
                 # Si han passat els T ticks, traspasso l'entitat al següent
                 self.traspassarEntitat(event.entitat, self._successor)
+                print("Soc Move i ha passat una entitat al següent")
 
                 # Actualitzem estat a lliure
                 self.set_estat(Estat.LLIURE)
+                self.avisarAgentesDelBufferDeEntidadesPendientes()
 
                 self.sortidesMove += 1
 
             #Si mentres estic ocupat tractant una entitat, n'entra una altra
-            elif event.tipus == TipusEvent.TraspasEntitat: #???
-                # Si ens arriba una entitat, la guardem per a més tard?
-                # self._traspassosPendents.append(event) NOP!
-
-                # M'envio la entitat a mi mateix, la classe slam s'encarregarà de ficar-me-la a la cua ?
-                self.traspassarEntitat(event.entitat, self)
+            elif event.tipus == TipusEvent.TraspasEntitat:
+                self.pendent_entities_buffer.append(event.desde)
 
 
     def iniciSimulacio(self):
@@ -97,5 +110,7 @@ class move(slamiii):
     def summary(self):
         #Pot ser una bona praxis disposar d'un resum del que ha fet el vostre element al llarg de tota l'execució
         return " EST --> entrades: "+str(self.entrades)+' | sortides a Gate: '+str(self.sortidesGate)+' | sortides normals (continuació del flux): '+str(self.sortidesMove)
-        
+
+    def set_gate_reference(self, global_gate_reference):
+        self.Gate = global_gate_reference
         

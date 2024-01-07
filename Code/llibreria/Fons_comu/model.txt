@@ -1,4 +1,5 @@
 gate,3
+move,4,gate
 nop,
 nop,
 nop,

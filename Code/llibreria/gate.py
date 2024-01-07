@@ -57,6 +57,7 @@ class gate(slamiii):
         currentState = self.get_estat()
         
         if currentState == Estat.OBERTA:
+            # print("GATE OPEN")
             if event.tipus == TipusEvent.EstaLaPortaOberta:
                 traspas=esdeveniment(perA=event.desde,temps=self.scheduler.temps(),tipus=TipusEvent.EsticOberta,entitat=event.entitat,desde=self, prioritat=0)
                 self.scheduler.afegirEsdeveniment(traspas)
@@ -65,7 +66,8 @@ class gate(slamiii):
                 self.tancaPorta()
                   
             elif event.tipus == TipusEvent.TraspasEntitat:
-                self.estadisticEntrades += 1;
+                # print("GATE TRASP.")
+                self.estadisticEntrades += 1
                 self.traspassarEntitat(event.entitat,self._successor)
         elif currentState == Estat.TANCADA:
             if event.tipus == TipusEvent.EstaLaPortaOberta:
