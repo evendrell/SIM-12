@@ -172,9 +172,16 @@ class motorEventsDiscrets:
         if (esdevenimentActual.tipus==TipusEvent.IniciSimulacio):
             self.iniciSimulacio()
             #puc programar un o més traspasEntitat al meu objecte
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),0,0))
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.TraspasEntitat,entitat(),0,0))
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),0,0))
+            #self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),0,0))
+            #self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.TraspasEntitat,entitat(),0,0))
+            #self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),0,0))
+            nopInstance = nopActivity(self, "nop,0")
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),nopInstance,0))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],5,TipusEvent.EstaLaPortaOberta,entitat(),nopInstance,0))  
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.ObrirPortaEnTTics,entitat(),nopInstance,0))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),nopInstance,0))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],5,TipusEvent.EstaLaPortaOberta,entitat(),nopInstance,0))  
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],30,TipusEvent.TancarPorta,entitat(),nopInstance,0))
             
     def fiSimulacio(self):
         for activitat in self._llistaActivitats:

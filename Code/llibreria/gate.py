@@ -19,21 +19,30 @@ class gate(slamiii):
         # Inicialitzem estadistics
         self.estadisticEntrades=0
         
-        # Inicialitzem llistes per guardar referencies a les entitats
+        # Inicialitzem llistes per guardar referencies dels objectes que han demana si la porta esta oberta
         self.esta_oberta_list = []
+        
+        # Inicialitzem llistes per guardar referencies de les entitats que han demanat traspas
+        self.entitats_list = []
     
     def __repr__(self):
         return "gate"
     
     def obrePorta(self):
         self.set_estat(Estat.OBERTA)
-        self.esticOberta = True
         self.set_Z(self.z+1)
+        for objecteSim in self.esta_oberta_list:
+           traspas=esdeveniment(perA=objecteSim,temps=self.scheduler.temps(),tipus=TipusEvent.EsticOberta,entitat=None,desde=self, prioritat=0)
+           self.scheduler.afegirEsdeveniment(traspas)
+        
+        for objecteSim in self.entitats_list:
+            objecteSim.traspasHabilitat(self, 999)
+    
         self.esta_oberta_list = []
+        self.entitats_list = []
         
     def tancaPorta(self):
         self.set_estat(Estat.TANCADA)
-        self.esticOberta = False
         self.set_Z(self.z+1)
         
     def esticOberta(self):
@@ -49,9 +58,8 @@ class gate(slamiii):
         
         if currentState == Estat.OBERTA:
             if event.tipus == TipusEvent.EstaLaPortaOberta:
-                # TODO: Revisar funcionament per gestionar referencies a entitats
-                self.esta_oberta_list.append(event.desde)
-                self.traspassarEntitat(event.entitat,self._successor)
+                traspas=esdeveniment(perA=event.desde,temps=self.scheduler.temps(),tipus=TipusEvent.EsticOberta,entitat=event.entitat,desde=self, prioritat=0)
+                self.scheduler.afegirEsdeveniment(traspas)
                 
             elif event.tipus == TipusEvent.TancarPorta:
                 self.tancaPorta()
@@ -61,25 +69,24 @@ class gate(slamiii):
                 self.traspassarEntitat(event.entitat,self._successor)
         elif currentState == Estat.TANCADA:
             if event.tipus == TipusEvent.EstaLaPortaOberta:
-                # TODO: Revisar funcionament per gestionar referencies a entitats
                 self.esta_oberta_list.append(event.desde)
             
             elif event.tipus == TipusEvent.ObrirPortaEnTTics:
                 self.obraPortaEnTTics(event)
                 
             elif event.tipus == TipusEvent.ObrirPorta:
-                # TODO: Acabar de revisar comportament per enviar esdeveniment de que esticOberta a totes les entitats que han preguntat
-                # TODO: Decidir si ho fem amb esdeveniments o directament amb una funció
+                # TODO: Acabar de revisar comportament amb objecte Move (estic Oberta logic)
                 self.obrePorta()
                 
             elif event.tipus == TipusEvent.TraspasEntitat:
                 self.estadisticEntrades += 1;
-                self.esta_oberta_list.append(event.desde)
+                self.entitats_list.append(event.desde)
 
     def iniciSimulacio(self):
         super(gate, self).iniciSimulacio()
         self.estadisticEntrades=0
         self.esta_oberta_list = []
+        self.entitats_list = []
         self.set_estat(Estat.TANCADA) 
         pass
     
@@ -87,7 +94,7 @@ class gate(slamiii):
         super(gate,self).fiSimulacio()
     
     def acceptaEntitat(self, n):
-        return n
+        return self.get_estat() == Estat.OBERTA
     
     def summary(self):
         return " EST: "+str(self.estadisticEntrades)+' '+str(self._surten) + ' z: '+ str(self.get_Z()) + ' IDs de les entitats que han preguntat: ' + str(self.esta_oberta_list)

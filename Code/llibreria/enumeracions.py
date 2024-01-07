@@ -17,7 +17,7 @@ class TipusEvent(Enum):
     ObrirPorta=240
     TancarPorta=241
     ObrirPortaEnTTics=242
-    EstaLaPortaOberta=243
+    EstaLaPortaOberta=243 #Aquest event el genera la porta per a preguntar si està oberta
     EsticOberta=244
 
 #Amplieu per si voleu usar alhora de treure una traça dels events.
