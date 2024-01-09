@@ -1,13 +1,16 @@
+from entitatIdFactory import entitatIdFactory
 class entitat():
     #estaria bé que el _id fos únic per a cada instància d'entitat
     _id=0
-    
+
     def __init__(self,):
-       #TODO Molt per fer
-       
-       #llista atributs...
-       self.atributs = []
-       return
+        #Inicialitzem el id de l'entitat
+        idFactory = entitatIdFactory()
+        self._id = entitatIdFactory.get_id(idFactory)
+
+        # Inicialitzem llista d'atributs
+        self.atributs = []
+        return
     
 
     # Devuelve el atributo en la posición del índice
