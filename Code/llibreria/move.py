@@ -17,7 +17,6 @@ class move(slamiii):
         self.T = int(parametres_list[2])
         self.Gate = parametres_list[3]
 
-
         #Objectes que tenen entitats pendents d'entrar al move
         self.pendent_entities_buffer = []
 
@@ -25,13 +24,16 @@ class move(slamiii):
         # Usem Lliure i Servei en comptes d'IDLE i WAITING
         self.set_estat(Estat.LLIURE)
 
-        #estadistics
+        #estadistics interns
         self.entrades = 0
         self.sortidesGate = 0
         self.sortidesMove = 0
-
-        self.currentEntityOrNull = None
         self.entitiesThatHaveEntered = []
+
+        #Id de la entitat que estic tractant
+        # (per si mentres estic en servei amb entitat B, es dispara un event per tractar entitat A que ja havia soltat)
+        self.currentEntityOrNull = None
+
         
     def __repr__(self):
         return "move "+str(self.id())
@@ -111,6 +113,7 @@ class move(slamiii):
 
     def iniciSimulacio(self):
         super(move, self).iniciSimulacio()
+        self.Gate = self.scheduler.donamActivitat(int(self.Gate))
         self.entrades=0
         self.sortidesGate=0
         self.sortidesMove=0
@@ -123,14 +126,14 @@ class move(slamiii):
     def acceptaEntitat(self, n):
         #aquí estic suposant que ho accepto tot, us convenç?
         if (self.get_estat()== Estat.SERVEI):
-            return True
-        return False
+            return False
+        return True
     
     def summary(self):
         #Pot ser una bona praxis disposar d'un resum del que ha fet el vostre element al llarg de tota l'execució
         return " EST --> entr: "+str(self.entrades)+' | sort.G: '+str(self.sortidesGate)+' | sort.N: '+str(self.sortidesMove) + ' | entidades +' + str(self.entitiesThatHaveEntered)
 
     def set_gate_reference(self, global_gate_reference):
-        print("Soc move i he rebut una referència a la porta: " + str(global_gate_reference))
+        # print("Soc move i he rebut una referència a la porta: " + str(global_gate_reference))
         self.Gate = global_gate_reference
-        
+
