@@ -14,7 +14,6 @@ import time
 Inicieu el vostre motor de simulació a partir d'aquesta classe
 '''
 
-global_gate_reference = None
 
 class motorEventsDiscrets:
     _tempsSimulacio = 0
@@ -166,8 +165,6 @@ class motorEventsDiscrets:
         if 'gate' in activitat:
             creat=True
             element=gate(self,activitat)
-            # global_gate_reference = element
-            # print("Soc motorEventsDiscrets i he creat una porta: " + str(global_gate_reference))
         if 'move' in activitat:
             creat = True
             element = move(self, activitat)
@@ -194,8 +191,6 @@ class motorEventsDiscrets:
             # nopInstance = nopActivity(self, "nop,0")
 
             entities = [entitat() for i in range(3, 10)]
-            for e in entities:
-                e.id = range(3,10)[entities.index(e)]
 
             #Abrimos puerta
             self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0], 0, TipusEvent.ObrirPorta, entities[4],self._llistaActivitats[0],0))
