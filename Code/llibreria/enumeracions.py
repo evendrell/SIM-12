@@ -6,7 +6,8 @@ class Estat(Enum):
     SERVEI = 2
     BLOQUEJAT = 3
     BATCHING = 4
-    DESTROYED = 5
+    RESOURCING = 5
+    DESTROYED = 6
 
 #Amplieu amb aquells tipus d'events que considereu necessaris.
 class TipusEvent(Enum):
