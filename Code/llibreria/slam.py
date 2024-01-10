@@ -46,6 +46,7 @@ class slamiii:
             return #No podem enviar res a None
         
         #esdeveniment que programeu que s'inserirà a la llista d'esdeveniment
+        #Es guarda en el objecte que ha intentat enviar la entitat (origen)
         traspas=esdeveniment(desti,self.scheduler.temps(),TipusEvent.TraspasEntitat,entitat,self)
         if (desti.acceptaEntitat(1)):
             #En aquest punt li diem al motor que afegeixi l'esdeveniment a la posició que li per toca
@@ -53,6 +54,9 @@ class slamiii:
             self._surten=self._surten+1
         else:
             #si no puc afegir el guardo per a més tard
+            # i a més continuo enviant l'event que serà capturat per l'objecte destí !!!!!,
+            # que es guardarà una referencia al meu objecte (a aquest self) i m'avisarà de quan li pugui enviar l'entitat
+            self.scheduler.afegirEsdeveniment(traspas)
             self._traspassosPendents.append(traspas)
 
     #Si algun objecte us demanava d'enviar-vos una entitat cal que us enrecordeu de qui és per poder després cridar el métode traspasHabilitat de l'objecte implicat

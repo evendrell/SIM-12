@@ -11,7 +11,9 @@ class entitat():
         # Inicialitzem llista d'atributs
         self.atributs = []
         return
-    
+
+    def get_id(self):
+        return self._id
 
     # Devuelve el atributo en la posición del índice
     def get_atribut(self, index):
