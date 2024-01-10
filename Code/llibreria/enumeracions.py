@@ -8,13 +8,20 @@ class Estat(Enum):
     BATCHING = 4
     RESOURCING = 5
     DESTROYED = 6
-
+    OBERTA = 240
+    TANCADA = 241
 #Amplieu amb aquells tipus d'events que considereu necessaris.
 class TipusEvent(Enum):
     IniciSimulacio=1
     FiSimulacio=2
     TraspasEntitat=3
     CreaMentitats=4
+    ObrirMoveEnTTics = 180
+    ObrirPorta=240
+    TancarPorta=241
+    ObrirPortaEnTTics=242
+    EstaLaPortaOberta=243 #Aquest event el genera la porta per a preguntar si està oberta
+    EsticOberta=244
 
 #Amplieu per si voleu usar alhora de treure una traça dels events.
 class Colors:

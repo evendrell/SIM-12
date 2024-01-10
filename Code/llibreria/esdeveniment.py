@@ -14,5 +14,8 @@ class esdeveniment:
         return str(self.tempsExecucio)+' '+str(self.type)
 
     def __gt__(self, esdeveniment):
-        #afegiu la prioritat com a condició d'ordenament
+        # Si tenen la mateixa prioritat, el que té menys temps d'execució té prioritat
+        if self.tempsExecucio == esdeveniment.tempsExecucio:
+            return self.prioritat > esdeveniment.prioritat
+        
         return self.tempsExecucio > esdeveniment.tempsExecucio
