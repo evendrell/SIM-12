@@ -6,6 +6,8 @@ class Estat(Enum):
     SERVEI = 2
     BLOQUEJAT = 3
     BATCHING = 4
+    RESOURCING = 5
+    DESTROYED = 6
     OBERTA = 240
     TANCADA = 241
 #Amplieu amb aquells tipus d'events que considereu necessaris.
