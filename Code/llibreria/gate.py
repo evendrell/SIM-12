@@ -14,7 +14,7 @@ class gate(slamiii):
         self.T = int(parametres_list[2])
 
         # Actualitzem estat inicial
-        self.set_estat(Estat.TANCADA) 
+        self.set_estat(Estat.OBERTA)
 
         # Inicialitzem estadistics
         self.estadisticEntrades=0
@@ -88,7 +88,7 @@ class gate(slamiii):
         self.estadisticEntrades=0
         self.esta_oberta_list = []
         self.entitats_list = []
-        self.set_estat(Estat.TANCADA) 
+        self.set_estat(Estat.OBERTA)
         pass
     
     def fiSimulacio(self):

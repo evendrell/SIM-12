@@ -32,15 +32,17 @@ class move(slamiii):
 
         #Id de la entitat que estic tractant
         # (per si mentres estic en servei amb entitat B, es dispara un event per tractar entitat A que ja havia soltat)
-        self.currentEntityOrNull = None
+        self.currentEntityOrMinusOne = -1
 
         
     def __repr__(self):
         return "move "+str(self.id())
 
     def avisarAgentesDelBufferDeEntidadesPendientes(self):
+        print("Soc Move i aviso a tots els agents del meu buffer: " + str(self.pendent_entities_buffer))
         for objecteSim in self.pendent_entities_buffer:
             objecteSim.traspasHabilitat(self, 1)
+        self.pendent_entities_buffer = []
         
     def tractarEsdeveniment(self, event):
         currentState = self.get_estat()
@@ -50,7 +52,7 @@ class move(slamiii):
             #Si ens arriba una entitat...
             if event.tipus == TipusEvent.TraspasEntitat:
 
-                self.currentEntityOrNull = event.entitat._id
+                self.currentEntityOrMinusOne = event.entitat._id
                 self.entitiesThatHaveEntered.append(event.entitat._id)
 
                 self.entrades+=1
@@ -73,7 +75,7 @@ class move(slamiii):
 
         elif currentState == Estat.SERVEI:
             if event.tipus == TipusEvent.EsticOberta:
-                if event.entitat._id == self.currentEntityOrNull:
+                if event.entitat != None and event.entitat._id == self.currentEntityOrMinusOne:
                     # Si la porta està oberta, li traspasso l'entitat
                     self.traspassarEntitat(event.entitat, self.Gate)
 
@@ -81,7 +83,7 @@ class move(slamiii):
                     # Actualitzem estat a lliure
                     self.set_estat(Estat.LLIURE)
                     self.avisarAgentesDelBufferDeEntidadesPendientes()
-                    self.currentEntityOrNull = None
+                    self.currentEntityOrMinusOne = -1
 
                     self.sortidesGate += 1
 
@@ -91,7 +93,7 @@ class move(slamiii):
                     pass
 
             elif event.tipus == TipusEvent.ObrirMoveEnTTics:
-                if event.entitat._id == self.currentEntityOrNull:
+                if event.entitat != None and event.entitat._id == self.currentEntityOrMinusOne:
                     # Si han passat els T ticks, traspasso l'entitat al següent
                     self.traspassarEntitat(event.entitat, self._successor)
                     print("Soc Move i ha passat una entitat al següent")
@@ -99,7 +101,7 @@ class move(slamiii):
                     # Actualitzem estat a lliure
                     self.set_estat(Estat.LLIURE)
                     self.avisarAgentesDelBufferDeEntidadesPendientes()
-                    self.currentEntityOrNull = None
+                    self.currentEntityOrMinusOne = -1
 
                     self.sortidesMove += 1
                 else:
@@ -108,6 +110,7 @@ class move(slamiii):
 
             #Si mentres estic ocupat tractant una entitat, n'entra una altra
             elif event.tipus == TipusEvent.TraspasEntitat:
+                print("Soc Move i he rebut una entitat (id:"+str(event.entitat.get_id())+") mentre estava tractant una altra entitat")
                 self.pendent_entities_buffer.append(event.desde)
 
 
