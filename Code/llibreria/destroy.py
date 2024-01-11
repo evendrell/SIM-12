@@ -44,7 +44,7 @@ class destroy(slamiii):
             else:
                 self.destroy(self, event.entitat)
                 if (self.entity_queue.qsize() > 0):
-                    entitat = self.entity_queue.get()
+                    entitat = remove_queue_entity(self)
                     self.schedule_destroy_event(self, event)
                     self.destroy(self, entitat)
                 else:
@@ -64,6 +64,9 @@ class destroy(slamiii):
     
     def add_queue_entity(self, entitat):
         self.entity_queue.put(entitat)
+    
+    def remove_queue_entity(self):
+        return self.entity_queue.get()
     
     def summary(self):
         return " "
