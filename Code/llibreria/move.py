@@ -78,6 +78,7 @@ class move(slamiii):
                 if event.entitat != None and event.entitat._id == self.currentEntityOrMinusOne:
                     # Si la porta està oberta, li traspasso l'entitat
                     self.traspassarEntitat(event.entitat, self.Gate)
+                    print("Soc Move i envio una entitat a la porta")
 
 
                     # Actualitzem estat a lliure
@@ -96,7 +97,7 @@ class move(slamiii):
                 if event.entitat != None and event.entitat._id == self.currentEntityOrMinusOne:
                     # Si han passat els T ticks, traspasso l'entitat al següent
                     self.traspassarEntitat(event.entitat, self._successor)
-                    print("Soc Move i ha passat una entitat al següent")
+                    print("Soc Move i ha passat una entitat al següent agent")
 
                     # Actualitzem estat a lliure
                     self.set_estat(Estat.LLIURE)
