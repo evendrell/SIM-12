@@ -39,7 +39,7 @@ class move(slamiii):
         return "move "+str(self.id())
 
     def avisarAgentesDelBufferDeEntidadesPendientes(self):
-        print("Soc Move i aviso a tots els agents del meu buffer: " + str(self.pendent_entities_buffer))
+        print("         i aviso a tots els agents del meu buffer: " + str(self.pendent_entities_buffer)+" de que estic disponible")
         for objecteSim in self.pendent_entities_buffer:
             objecteSim.traspasHabilitat(self, 1)
         self.pendent_entities_buffer = []
