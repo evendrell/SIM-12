@@ -2,48 +2,84 @@ from slam import *
 from queue import Queue
 from entitat import *
 
-class select(slamiii):
-
-    # conèixer el motor de simulació pot anar molt bé
-    def __init__(self,scheduler,parametres):
-        super(batch, self).__init__(scheduler,parametres)
-        #Que faig amb parametres, en aquest cas nop
-        self.parametres=parametres
+class Select(slamiii):
+    def __init__(self, scheduler, parametres):
+        super(Select, self).__init__(scheduler, parametres)
+        self.parametres = parametres
         lista_atributos = parametres.split(',')
-        #Esther t'he corregit l'accés als paràmetres dons els dos primers són l'identificador de l'activitat i el tipus activitat
-        #Atenció tots, recordeu a forçar el tipus del paràmetre
         self.n = int(lista_atributos[2])
-        self.action = lista_atributos[3]
-        self.m = int(lista_atributos[4])
+        self.frm1 = lista_atributos[3]
+        self.frm2 = lista_atributos[4]
+        self.last_attribute = lista_atributos[5]
+        self.m = int(lista_atributos[6])
         self.set_estat(Estat.LLIURE)
-        #Esther, al final no necessita la cua per emmagatzemar temporalment les entitats pq sols usem el LAST com a métode d'assignació dels atributs de la nova entitat
-        #self.cola = Queue(maxsize=self.m)
         self.novaEntitat = None
         self.entitatsProcesades = 0
-        self.estadisticProcessades=0
-        self.estadisticCreades=0
+        self.estadisticProcessades = 0
+        self.estadisticCreades = 0
+        self.cola_frm1 = Queue()  # Cola para entidades de frm1
+        self.cola_frm2 = Queue()  # Cola para entidades de frm2
 
     def __repr__(self):
         return "select"
 
+    def actualitzarAtributs(self, entitat):
+        if self.last_attribute in entitat.atributs:
+            self.novaEntitat.atributs[self.last_attribute] = entitat.atributs[self.last_attribute]
 
-    #Código chorizeado
+    def tractarEsdeveniment(self, event):
+        if self.get_estat() == Estat.LLIURE:
+            if event.tipus == TipusEvent.TraspasEntitat:
+                # Pull de las colas frm1 y frm2
+                for _ in range(self.n):
+                    self.cola_frm1.put(self.pull_entidad(self.frm1))
+                    self.cola_frm2.put(self.pull_entidad(self.frm2))
+
+
+                # Hago cola y acumulo entidades
+                self.novaEntitat = entitat()
+                self.entitatsProcesades = 1
+                self.estadisticProcessades += 1
+                self.set_estat(Estat.SELECTING)
+
+        elif self.get_estat() == Estat.SELECTING:
+            if event.tipus == TipusEvent.TraspasEntitat:
+                self.actualitzarAtributs(event.entitat)
+
+                self.entitatsProcesades += 1
+                self.estadisticProcessades += 1
+                if self.entitatsProcesades == self.n:
+                    self.estadisticCreades += 1
+
+                    # Arribat a aquest punt, hem processat n entitats
+                    self.traspassarEntitat(self.novaEntitat, self._successor)
+                    self.set_estat(Estat.LLIURE)
+
+        elif self.get_estat() == Estat.CreaMentitats:
+            for _ in range(self.m):
+                self.traspassarEntitat(self.novaEntitat, self._successor)
+                self.set_estat(Estat.LLIURE)
+
+    def pull_entidad(self, cola):
+        # Lógica para extraer una entidad de la cola especificada
+        if cola:
+            return cola.pop(0)  # Extracción FIFO (primero en entrar, primero en salir)
+        else:
+            return None  # Manejo de cola vacía
+
     def iniciSimulacio(self):
-        super(select, self).iniciSimulacio()
-        self.entren=0
-        self.set_estat(Estat.LLIURE)
-        print('Soc nop i he rebut un iniciSimulacio')
-        #Jo no he de fer res
-        pass
-    
+        super(Select, self).iniciSimulacio()
+        # Posar els estadístics a zero
+        self.entitatsProcesades = 0
+        self.estadisticProcessades = 0
+        self.estadisticCreades = 0
+
     def fiSimulacio(self):
-        #Aquí tampoc faig res
-        pass
- 
+        super(Select, self).fiSimulacio()
+
     def acceptaEntitat(self, n):
-        #aquí estic suposant que ho accepto tot, us convenç?
+        # Suposant que ho accepto tot
         return n
-    
+
     def summary(self):
-        #Pot ser una bona praxis disposar d'un resum del que ha fet el vostre element al llarg de tota l'execució
-        return " EST: "+str(self.entren)+' '+str(self._surten)
+        return " EST: " + str(self.estadisticProcessades) + ' ' + str(self.estadisticCreades)

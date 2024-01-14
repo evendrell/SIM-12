@@ -8,6 +8,7 @@ class Estat(Enum):
     BATCHING = 4
     RESOURCING = 5
     DESTROYED = 6
+    SELECTING = 45
     OBERTA = 240
     TANCADA = 241
 #Amplieu amb aquells tipus d'events que considereu necessaris.
