@@ -46,6 +46,7 @@ class slamiii:
             return #No podem enviar res a None
         
         #esdeveniment que programeu que s'inserirà a la llista d'esdeveniment
+        #Es guarda en el objecte que ha intentat enviar la entitat (origen)
         traspas=esdeveniment(desti,self.scheduler.temps(),TipusEvent.TraspasEntitat,entitat,self)
         if (desti.acceptaEntitat(1)):
             #En aquest punt li diem al motor que afegeixi l'esdeveniment a la posició que li per toca
@@ -53,21 +54,31 @@ class slamiii:
             self._surten=self._surten+1
         else:
             #si no puc afegir el guardo per a més tard
+            # i a més continuo enviant l'event que serà capturat per l'objecte destí !!!!!,
+            # que es guardarà una referencia al meu objecte (a aquest self) i m'avisarà de quan li pugui enviar l'entitat
+            self.scheduler.afegirEsdeveniment(traspas)
             self._traspassosPendents.append(traspas)
 
     #Si algun objecte us demanava d'enviar-vos una entitat cal que us enrecordeu de qui és per poder després cridar el métode traspasHabilitat de l'objecte implicat
     def traspasHabilitat(self,desti,espai):
         #Cal que busqueu dins la llista de traspassosPendents aquells esdeveniments que tenen el .perA igual a desti
         #doncs destí us diu que té espai lliures, per a cada candidat podeu invocar de nou el traspassarEntitat
-        
+        candidats = [traspas for traspas in self._traspassosPendents if traspas.perA == desti]
         #candidat=....
         # candidat.perA==desti traspassarEntitat(candidat.perA,candidat.entitat) i eliminar candidat de la llista
 
         
         #el temps de simulació que teniu en el candidat s'ha d'actualitzar amb el temps actual de simulació.
 
-        #traspassarEntitat(traspas)
-        pass
+        for candidat in candidats:
+            # Actualizar el tiempo de simulación en el candidato
+            candidat.tempsExecucio = self.scheduler.temps()
+
+            # Llamar a traspassarEntitat para cada candidato
+            self.traspassarEntitat(candidat.entitat, desti)
+
+            # Eliminar el candidato de la lista de traslados pendientes
+            self._traspassosPendents.remove(candidat)
                 
     def iniciSimulacio(self):
         #El vostre element ha de fer quelcom especial quan s'inicia la simulació?
@@ -109,8 +120,6 @@ class slamiii:
 
     def get_Z(self):
         return self.z;
-    
-    
     
     def id(self):
         return self._id;
