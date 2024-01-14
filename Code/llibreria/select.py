@@ -13,7 +13,14 @@ class Select(slamiii):
         self.last_attribute = lista_atributos[5]
         self.m = int(lista_atributos[6])
         self.set_estat(Estat.LLIURE)
-        self.novaEntitat = None
+
+        #Entitats de cada cua
+        self.novaEntitat_frm1 = None
+        self.novaEntitat_frm2 = None
+
+        entitat_frm1 = []
+        entitat_frm2 = []
+
         self.entitatsProcesades = 0
         self.estadisticProcessades = 0
         self.estadisticCreades = 0
@@ -31,29 +38,40 @@ class Select(slamiii):
         if self.get_estat() == Estat.LLIURE:
             if event.tipus == TipusEvent.TraspasEntitat:
                 # Pull de las colas frm1 y frm2
-                for _ in range(self.n):
-                    self.cola_frm1.put(self.pull_entidad(self.frm1))
-                    self.cola_frm2.put(self.pull_entidad(self.frm2))
+                for _ in range(self.m // 2):
+                    entitat_frm1 = self.pull_entidad(self.frm1)
+                    entitat_frm2 = self.pull_entidad(self.frm2)
 
 
                 # Hago cola y acumulo entidades
-                self.novaEntitat = entitat()
-                self.entitatsProcesades = 1
-                self.estadisticProcessades += 1
+                novaEntitat_frm1 = entitat()
+                novaEntitat_frm1.atributs['LAST'] = entitat_frm1.atributs['LAST']
+                self.cola_frm1.put(novaEntitat_frm1)
+
+                novaEntitat_frm2 = entitat()
+                novaEntitat_frm2.atributs['LAST'] = entitat_frm2.atributs['LAST']
+                self.cola_frm2.put(novaEntitat_frm2)
+
+
+                self.entitatsProcesades = 2
+                self.estadisticProcessades += 2
+
                 self.set_estat(Estat.SELECTING)
 
         elif self.get_estat() == Estat.SELECTING:
             if event.tipus == TipusEvent.TraspasEntitat:
-                self.actualitzarAtributs(event.entitat)
+                #self.actualitzarAtributs(event.entitat)
 
                 self.entitatsProcesades += 1
                 self.estadisticProcessades += 1
                 if self.entitatsProcesades == self.n:
                     self.estadisticCreades += 1
 
-                    # Arribat a aquest punt, hem processat n entitats
-                    self.traspassarEntitat(self.novaEntitat, self._successor)
-                    self.set_estat(Estat.LLIURE)
+                # Arribat a aquest punt, hem processat n entitats
+                self.traspassarEntitat(self.cola_frm1.get(), self._successor)
+                self.traspassarEntitat(self.cola_frm2.get(), self._successor)
+
+                self.set_estat(Estat.LLIURE)
 
         elif self.get_estat() == Estat.CreaMentitats:
             for _ in range(self.m):
