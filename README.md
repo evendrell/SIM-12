@@ -22,7 +22,7 @@ Mario Martín: Select
 Gisela Borràs: Alter
 Alba Mª Server: Match
 Daniel Morón: Gate
-Juan Emilio Olivan: Move
+Juane Olivan: Move
 Esther Vendrell: Batch
 Javi Abella: Preempt
 

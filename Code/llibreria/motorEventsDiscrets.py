@@ -4,6 +4,8 @@ from nopActivity import *
 from blockActivity import *
 from batch import *
 from detect import *
+from gate import *
+from move import *
 import curses
 import time
 
@@ -11,6 +13,7 @@ import time
 '''
 Inicieu el vostre motor de simulació a partir d'aquesta classe
 '''
+
 
 class motorEventsDiscrets:
     _tempsSimulacio = 0
@@ -54,9 +57,13 @@ class motorEventsDiscrets:
                 index=4
             
             
-            stdscr.addstr(y+i,25, instruccio,curses.color_pair(index))
+            stdscr.addstr(y+i,25, instruccio,curses.color_pair(3))
             stdscr.addstr(y+i,50, self._llistaActivitats[i].summary(),curses.color_pair(index))
-            stdscr.addstr(y+i,1, str(self._llistaActivitats[i].get_estat()).capitalize(),curses.color_pair(index))           
+            stdscr.addstr(y+i,1, str(self._llistaActivitats[i].get_estat()).capitalize(),curses.color_pair(index))
+
+            # print(instruccio)
+            # print(self._llistaActivitats[i].summary())
+            # print(str(self._llistaActivitats[i].get_estat()).capitalize())
 
     def renderStatus(self,stdscr,height,width,executare,first):
         stdscr.attron(curses.color_pair(2))
@@ -155,6 +162,12 @@ class motorEventsDiscrets:
         if 'detect' in activitat:
             creat=True
             element=detect(self, activitat)
+        if 'gate' in activitat:
+            creat=True
+            element=gate(self,activitat)
+        if 'move' in activitat:
+            creat = True
+            element = move(self, activitat)
         if not creat:
             element=nopActivity(self,activitat)
         
@@ -167,11 +180,22 @@ class motorEventsDiscrets:
     def tractarEsdeveniment(self,esdevenimentActual):
         if (esdevenimentActual.tipus==TipusEvent.IniciSimulacio):
             self.iniciSimulacio()
-            #puc programar un o més traspasEntitat al meu objecte
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entitat(),0,0))
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],10,TipusEvent.TraspasEntitat,entitat(),0,0))
-            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],20,TipusEvent.TraspasEntitat,entitat(),0,0))
-            
+
+            #Entitats auxiliars per als events
+            entities = [entitat() for i in range(3, 10)]
+
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[0],0,TipusEvent.TraspasEntitat,entities[0],self._llistaActivitats[0]))
+
+            #TODO: afegir més esdeveniments per iniciar la simulació
+
+            #Entitats a Move i a Gate
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[4],1,TipusEvent.TraspasEntitat,entities[0],self._llistaActivitats[6]))
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[5],5,TipusEvent.TraspasEntitat,entities[1],self._llistaActivitats[6]))
+
+            #Tanquem Gate
+            self.afegirEsdeveniment(esdeveniment(self._llistaActivitats[5], 10, TipusEvent.TancarPorta, entities[0],self._llistaActivitats[4]))
+
+
     def fiSimulacio(self):
         for activitat in self._llistaActivitats:
             activitat.fiSimulacio()
