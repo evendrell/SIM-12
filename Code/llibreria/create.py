@@ -14,7 +14,7 @@ class create(slamiii):
         llista_atributs = parametres.split(',')
         # Esther t'he corregit l'accés als paràmetres dons els dos primers són l'identificador de l'activitat i el tipus activitat
         self.MAX = int(llista_atributs[2])
-        self.T = llista_atributs[3]
+        self.T = int(llista_atributs[3])
         self.M = int(llista_atributs[4])
         self.estadisticEntitatsCreades = 0
         self.estadisticEsdevenimentsProcesats = 0
@@ -61,4 +61,4 @@ class create(slamiii):
 
     def summary(self):
         # Pot ser una bona praxis disposar d'un resum del que ha fet el vostre element al llarg de tota l'execució
-        return " EST: " + str(self.estadisticEsdevenimentsProcesats) + ' ' + str(self.estadisticEntitatsCreades)
+        return " EST: " + str(self.estadisticEntitatsCreades) + ' ' + str(self.estadisticEsdevenimentsProcesats)
