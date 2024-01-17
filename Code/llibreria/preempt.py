@@ -1,38 +1,59 @@
-from slam import *
-from queue import Queue
-from entitat import entitat
-from motorEventsDiscrets import *
+import queue
+import heapq
+class Preempt:
+    def __init__(self, M):
+        self.capacity = M
+        self.wait_queue = queue.PriorityQueue()
+        self.processing_entities = []  # Heap structure to processing entities by priority
+        self.await_file = []  # entities awaiting reactivation
 
-class Preempt():
-    def __init__(self, ifl, priority, resource, snlbl = None, natr = None, m = None):
-        self.ifl = ifl
-        self.priority = priority
-        self.resource = resource
-        self.snlbl = snlbl
-        self.natr = natr
-        self.m = m
-        self.seized_entities = []
+    def request_resource(self, entity_id, priority):
+        entity = (-priority, entity_id)
 
-    def seize_resource(self, entity_priority):
-        # Lógica para prevenir el recurso
-        # Comprueba la prioridad, la capacidad del recurso, etc.
-        if self.priority == "HIGH(NATR)":  # Si es alta prioridad
-            if not self.seized_entities:  # Si no hay entidades en cola
-                self.seized_entities.append(entity_priority)
-                return "Resource seized"
-            else:
-                if entity_priority > self.seized_entities[0]:
-                    self.seized_entities.insert(0, entity_priority)
-                    return "Resource seized with preemption"
-                else:
-                    return "Entity priority not high enough for preemption"
-        elif self.priority == "LOW(NATR)":  # Si es baja prioridad
-            self.seized_entities.append(entity_priority)
-            return "Resource seized"
+        if len(self.processing_entities) < self.capacity:
+            heapq.heappush(self.processing_entities, entity)
+            return "Resource seized", None
 
-    def release_resource(self):
-        # Lógica para liberar el recurso
-        if self.seized_entities:
-            return self.seized_entities.pop(0)
-        else:
-            return "No entity to release"
+        lowest_priority_entity = self.processing_entities[0]
+        if entity < lowest_priority_entity:
+            preempted_entity = heapq.heappop(self.processing_entities)
+            self.await_file.append(preempted_entity)
+            heapq.heappush(self.processing_entities, entity)
+            return "Resource seized with preemption", preempted_entity[1]
+
+        self.wait_queue.put(entity)
+        return "Entity waiting", None
+
+    def release_resource(self, entity_id):
+        for i, (_, e_id) in enumerate(self.processing_entities):
+            if e_id == entity_id:
+                heapq.heappop(self.processing_entities, i)
+                break
+
+        if self.await_file:
+            reactivated_entity = self.await_file.pop(0)
+            result, _ = self.request_resource(reactivated_entity[1], -reactivated_entity[0])
+            return "Resource released and entity reactivated", reactivated_entity[1]
+
+        if not self.wait_queue.empty() and len(self.processing_entities) < self.capacity:
+            next_entity = self.wait_queue.get()
+            heapq.heappush(self.processing_entities, next_entity)
+            return "Resource released and next entity processed", next_entity[1]
+
+        return "Resource released", None
+
+    def preempt_entity(self, entity_id):
+        for i, (priority, e_id) in enumerate(self.processing_entities):
+            if e_id == entity_id:
+                preempted_entity = heapq.heappop(self.processing_entities, i)
+                
+                self.await_file.append(preempted_entity)
+                
+
+        heapq.heapify(self.processing_entities)
+
+        if not self.wait_queue.empty() and len(self.processing_entities) < self.capacity:
+            next_entity = self.wait_queue.get()
+            heapq.heappush(self.processing_entities, next_entity)
+
+        return "Entity preempted"
