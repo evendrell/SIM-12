@@ -7,7 +7,7 @@ from detect import *
 from create import *
 from gate import *
 from move import *
-from open import *
+from openActivity import *
 import curses
 import time
 
