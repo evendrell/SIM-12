@@ -24,12 +24,11 @@ class unbatch(slamiii):
             self.set_estat(Estat.BATCHING)
             llista_entitats = [event*self.m]
             self.estadisticCreades += self.m
-            n = self.m
-            for i in range(n):
+            for n in range(self.m):
                 if n % 2 == 0:
-                    self.traspassarEntitat(llista_entitats[i], self.TO1)
+                    self.traspassarEntitat(llista_entitats[n], self.TO1)
                 else:
-                    self.traspassarEntitat(llista_entitats[i], self.TO2)
+                    self.traspassarEntitat(llista_entitats[n], self.TO2)
             self.set_estat(Estat.LLIURE)
 
     def iniciSimulacio(self):
