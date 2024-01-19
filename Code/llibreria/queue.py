@@ -23,7 +23,7 @@ class queue(slamiii):
         self.estadisticCreades=0
         
     def __repr__(self):
-        return "nop "+str(self.id())
+        return "query "+str(self.id())
         
     def tractarEsdeveniment(self, event):
         #Soc nop no importa el meu estat ni el meu event, simplement deixo passar l'entitat cap endavant
