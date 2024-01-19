@@ -37,23 +37,25 @@ class Select(slamiii):
         if self.get_estat() == Estat.LLIURE:
             if event.tipus == TipusEvent.TraspasEntitat:
                 time.sleep(300)
-                self.novaEntitat=entitat()
-                self.entitatsProcesades = self.n
-                self.estadisticProcessades += self.n
                 # Pull de las colas frm1 y frm2 -> Ja no cal
                 #for _ in range(self.m // 2):
                 #    entitat_frm1 = self.pull_entidad(self.frm1)
                 #    entitat_frm2 = self.pull_entidad(self.frm2)
-                
+                for _ in range(self.n):
+                    self.novaEntitat=entitat()
+                    #self.novaEntitat.atributs = "LAST"
+                    self.traspassarEntitat(self.novaEntitat, self._successor)
+                    self.entitatsProcesades += 1
+                    self.estadisticProcessades += 1
+
                 if self.entitatsProcesades == self.n:
                     self.estadisticCreades += 1
-                
-                for _ in range(self.n):
-                    self.traspassarEntitat(self.novaEntitat, self._successor)
 
             if event.tipus == TipusEvent.RepEntitat:
                 self.novaEntitat=entitat()
+                #self.novaEntitat.atributs = "LAST"
                 self.traspassarEntitat(self.novaEntitat, self._successor)
+                #Equivalent: self.traspassarEntitat(entitat(), self._successor)
                 
 #        elif self.get_estat() == Estat.SELECTING:
 #            if event.tipus == TipusEvent.TraspasEntitat:
