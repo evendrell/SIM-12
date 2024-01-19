@@ -4,8 +4,11 @@ from nopActivity import *
 from blockActivity import *
 from batch import *
 from detect import *
+from create import *
 from gate import *
 from move import *
+from openActivity import *
+from match import *
 import curses
 import time
 
@@ -168,6 +171,15 @@ class motorEventsDiscrets:
         if 'move' in activitat:
             creat = True
             element = move(self, activitat)
+        if 'create' in activitat:
+            creat = True
+            element = create(self, activitat)
+        if 'openActivity' in activitat:
+            creat = True
+            element = openActivity(self, activitat)
+        if 'match' in activitat:
+            creat = True
+            element = match(self, activitat)
         if not creat:
             element=nopActivity(self,activitat)
         

@@ -66,7 +66,9 @@ class detect(slamiii):
         pass
  
     def acceptaEntitat(self, n):
-        return n
+        if (self.get_estat()== Estat.SERVEI):
+            return False
+        return True
     
     def summary(self):
         return " EST: "+str(self.estadisticEntrades)+' '+str(self.estadisticSortides) + ' z: ' + str(slamiii.get_Z(slamiii))

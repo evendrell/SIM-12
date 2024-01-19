@@ -8,7 +8,8 @@ class Estat(Enum):
     BATCHING = 4
     RESOURCING = 5
     DESTROYED = 6
-    SELECTING = 45
+    MATCHING = 7
+    UNBATCHING = 8
     OBERTA = 240
     TANCADA = 241
 #Amplieu amb aquells tipus d'events que considereu necessaris.
@@ -17,6 +18,7 @@ class TipusEvent(Enum):
     FiSimulacio=2
     TraspasEntitat=3
     CreaMentitats=4
+    RepEntitat=5
     ObrirMoveEnTTics = 180
     ObrirPorta=240
     TancarPorta=241

@@ -20,7 +20,7 @@ class free(slamiii):
         return "free"
     
     def tractarEsdeveniment(self, event):
-        # Implement the behavior based on the state and the type of event
+
         if event.tipus == TipusEvent.TraspasEntitat:
             self.process_entity(event.entitat)
     
@@ -36,6 +36,9 @@ class free(slamiii):
         # Create additional entities if M > 0
         if M > 0:
             self.create_additional_entities(M)
+        
+        self.traspassarEntitat(entitat, self._successor)
+        self.entitatsProcesades += 1
 
     def free_resource_units(self, resource, units_to_free):
         # Here you would free the specified units from the resource
@@ -43,9 +46,8 @@ class free(slamiii):
         pass
     
     def create_additional_entities(self, M):
-        # Here you would create M additional entities
         for _ in range(M):
-            new_entity = entitat() # Create a new entity, implementation depends on the Entity class
+            new_entity = entitat()
             self.traspassarEntitat(new_entity, self._successor)
             self.entitatsCreades += 1
 
@@ -61,6 +63,6 @@ class free(slamiii):
         self.acceptaEntitat(n)
         pass
 
-def summary(self):
+    def summary(self):
         #Mostrar els estadístics per pantalla amb el nom, format desitjat 
         return " EST: "+str(self.entitatsProcesades)+' '+str(self.entitatsCreades)
