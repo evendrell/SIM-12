@@ -7,6 +7,7 @@ from detect import *
 from create import *
 from gate import *
 from move import *
+from openActivity import *
 from match import *
 import curses
 import time
@@ -173,6 +174,9 @@ class motorEventsDiscrets:
         if 'create' in activitat:
             creat = True
             element = create(self, activitat)
+        if 'openActivity' in activitat:
+            creat = True
+            element = openActivity(self, activitat)
         if 'match' in activitat:
             creat = True
             element = match(self, activitat)
