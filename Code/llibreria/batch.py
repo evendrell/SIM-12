@@ -1,5 +1,5 @@
 from slam import *
-from queue import Queue
+from queue import *
 from entitat import *
 
 class batch(slamiii):

@@ -1,5 +1,4 @@
 from slam import *
-from queue import Queue
 from entitat import *
 
 class queue(slamiii):

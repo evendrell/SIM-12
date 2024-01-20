@@ -1,5 +1,10 @@
-create,10,5,2
-match,1,0,0
+create,30,5,2
+detect,1,1,5
+batch,3,LAST,1
+unbatch,10,6,7
+move,4,5,
+gate,3,
+openActivity,5,5,
 nop,
 nop,
 nop,
